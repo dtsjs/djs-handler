@@ -46,11 +46,13 @@ export class Handler {
 
         return new Promise(async (resolve, reject) => {
             try {
-                const commandFolderPath = this.options.commandFolder;
+                const main = require.main;
+
+                const commandFolderPath = `${main?.path}/${this.options.commandFolder}`;
                 readdirSync(commandFolderPath).forEach((dir) => {
                     const commands = readdirSync(`${commandFolderPath}/${dir}`).filter(file => file.endsWith(".js") || file.endsWith(".ts"));
                     for (const file of commands) {
-                        const command: Command = require(`${commandFolderPath}/${dir}/${file}`);
+                        const command = require(`${commandFolderPath}/${dir}/${file}`);
 
                         const cmd = Utils.fixCommand(command);
 

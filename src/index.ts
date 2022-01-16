@@ -1,2 +1,3 @@
-export * from './slashCommand/commandCreator';
-export * from './slashCommand/handler.interfaces';
+import { Handler } from './slashCommand/commandCreator';
+import { Command, HandlerOptions } from './slashCommand/handler.interfaces';
+export { Handler, Command, HandlerOptions };

@@ -71,16 +71,18 @@ var Handler = /** @class */ (function () {
     }
     /**
      * @description Loads all commands from the command directory
+     * @kind private
      */
     Handler.prototype.loadCommands = function () {
         var _this = this;
         var allCommands = [];
         return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-            var commandFolderPath_1;
+            var main, commandFolderPath_1;
             var _this = this;
             return __generator(this, function (_a) {
                 try {
-                    commandFolderPath_1 = this.options.commandFolder;
+                    main = require.main;
+                    commandFolderPath_1 = "".concat(main === null || main === void 0 ? void 0 : main.path, "/").concat(this.options.commandFolder);
                     (0, fs_1.readdirSync)(commandFolderPath_1).forEach(function (dir) {
                         var commands = (0, fs_1.readdirSync)("".concat(commandFolderPath_1, "/").concat(dir)).filter(function (file) { return file.endsWith(".js") || file.endsWith(".ts"); });
                         var _loop_1 = function (file) {
@@ -126,6 +128,7 @@ var Handler = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_b) {
                 commands = this.client.allCommands.get('slashCommands');
+                console.log(commands)
                 if (!commands)
                     return [2 /*return*/];
                 if (this.options.guilds)
