@@ -1,6 +1,6 @@
 {
   "name": "@dtsjs/djs-handler",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "manage your slash command easily with djs cmd handler",
   "main": "build/index.js",
   "typings": "src/",
