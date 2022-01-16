@@ -4,7 +4,7 @@
 <p>
 <a href="https://www.npmjs.com/package/@dtsjs/djs-handler"><img src="https://img.shields.io/npm/dw/@dtsjs/djs-handler?style=flat-square"></a>
 <a href="https://www.npmjs.com/package/@dtsjs/djs-handler"><img src="https://img.shields.io/npm/v/@dtsjs/djs-handler?style=flat-square"></a>
-<a href="https://www.npmjs.com/package/@dtsjs/djs-handler"><img src="https://img.shields.io/badge/Instagram-Follow-FD1D1D?style=flat-square&logo=instagram"></a>
+<a href="https://instagram.com/tirupatibalajithedev"><img src="https://img.shields.io/badge/Instagram-Follow-FD1D1D?style=flat-square&logo=instagram"></a>
 </p>
 
 <br/>
@@ -26,6 +26,18 @@ npm i @dtsjs/djs-handler
 
 # Example Usage
 
+### Worktree
+```bash
+.
+├── ...
+├── index.js
+├── commands
+│   ├── ...
+│   └── info
+│       ├── ...
+│       └── ping.js
+└── ...
+```
 ### Main File
 
 ```js
