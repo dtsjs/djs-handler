@@ -1,0 +1,35 @@
+{
+  "name": "@dtsjs/djs-handler",
+  "version": "1.0.3-4",
+  "description": "manage your slash command easily with djs cmd handler",
+  "main": "build/index.js",
+  "typings": "src/",
+  "scripts": {
+    "test": "echo \"No test specified\"",
+    "build": "npx tsc"
+  },
+  "author": "Tirupatibalaji-Dev",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.8",
+    "nodemon": "^2.0.15",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dtsjs/djs-handler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dtsjs/djs-handler/issues"
+  },
+  "homepage": "https://github.com/dtsjs/djs-handler#readme",
+  "dependencies": {
+    "@discordjs/builders": "^0.11.0",
+    "discord-api-types": "^0.26.1",
+    "discord.js": "^13.5.1",
+    "events": "^3.3.0",
+    "typedoc": "^0.22.10"
+  }
+}
