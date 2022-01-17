@@ -35,6 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -54,11 +63,14 @@ var Handler = /** @class */ (function () {
     function Handler(client, options) {
         var _this = this;
         this.client = client;
-        var commandFolder = options.commandFolder, registerCommands = options.registerCommands, deferReply = options.deferReply, guilds = options.guilds;
+        var commandFolder = options.commandFolder, eventFolder = options.eventFolder, registerCommands = options.registerCommands, deferReply = options.deferReply, guilds = options.guilds;
         this.client.slashCommands = new discord_js_1.Collection();
         this.client.allCommands = new discord_js_1.Collection();
+        this.client.events = new discord_js_1.Collection();
+        var main = require.main;
         this.options = {
-            commandFolder: commandFolder,
+            commandFolder: commandFolder || "".concat(main === null || main === void 0 ? void 0 : main.path, "/commands"),
+            eventFolder: eventFolder || "".concat(main === null || main === void 0 ? void 0 : main.path, "/events"),
             registerCommands: registerCommands || false,
             deferReply: deferReply || false,
             guilds: guilds || []
@@ -68,25 +80,25 @@ var Handler = /** @class */ (function () {
                 _this.registerSlashCommands();
             _this.handleSlashCommands();
         });
+        this.loadEvents();
     }
     /**
      * @description Loads all commands from the command directory
-     * @kind private
      */
     Handler.prototype.loadCommands = function () {
         var _this = this;
         var allCommands = [];
         return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-            var main, commandFolderPath_1;
+            var main, commandsDir_1;
             var _this = this;
             return __generator(this, function (_a) {
                 try {
                     main = require.main;
-                    commandFolderPath_1 = "".concat(main === null || main === void 0 ? void 0 : main.path, "/").concat(this.options.commandFolder);
-                    (0, fs_1.readdirSync)(commandFolderPath_1).forEach(function (dir) {
-                        var commands = (0, fs_1.readdirSync)("".concat(commandFolderPath_1, "/").concat(dir)).filter(function (file) { return file.endsWith(".js") || file.endsWith(".ts"); });
+                    commandsDir_1 = "".concat(main === null || main === void 0 ? void 0 : main.path, "/").concat(this.options.commandFolder);
+                    (0, fs_1.readdirSync)(commandsDir_1).forEach(function (dir) {
+                        var commands = (0, fs_1.readdirSync)("".concat(commandsDir_1, "/").concat(dir)).filter(function (file) { return file.endsWith(".js") || file.endsWith(".ts"); });
                         var _loop_1 = function (file) {
-                            var command = require("".concat(commandFolderPath_1, "/").concat(dir, "/").concat(file));
+                            var command = require("".concat(commandsDir_1, "/").concat(dir, "/").concat(file));
                             var cmd = utils_1.default.fixCommand(command);
                             if (_this.client.isReady() === true) {
                                 _this.client.slashCommands.set(cmd.name, cmd);
@@ -128,7 +140,6 @@ var Handler = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_b) {
                 commands = this.client.allCommands.get('slashCommands');
-                console.log(commands)
                 if (!commands)
                     return [2 /*return*/];
                 if (this.options.guilds)
@@ -175,17 +186,39 @@ var Handler = /** @class */ (function () {
             });
         });
     };
+    Handler.prototype.loadEvents = function () {
+        var _this = this;
+        var main = require.main;
+        var eventsDir = "".concat(main === null || main === void 0 ? void 0 : main.path, "/").concat(this.options.eventFolder);
+        (0, fs_1.readdirSync)(eventsDir).forEach(function (dir) { return __awaiter(_this, void 0, void 0, function () {
+            var event;
+            var _this = this;
+            return __generator(this, function (_a) {
+                event = require("".concat(eventsDir, "/").concat(dir));
+                this.client.events.set(event.name, event);
+                this.client.on(event.name, function () {
+                    var args = [];
+                    for (var _i = 0; _i < arguments.length; _i++) {
+                        args[_i] = arguments[_i];
+                    }
+                    return event.run.apply(event, __spreadArray([_this.client], args, false));
+                });
+                return [2 /*return*/];
+            });
+        }); });
+    };
     /**
-     * reloadCommands
+     * reloadHandler
      * @description Reloads all commands
      * @memberof Handler
-     * @example Handler.reloadCommands()
+     * @example Handler.reloadHandler()
      */
-    Handler.prototype.reloadCommands = function () {
+    Handler.prototype.reloadHandler = function () {
         var _this = this;
         this.loadCommands().then(function () {
             _this.registerSlashCommands();
         });
+        this.loadEvents();
     };
     return Handler;
 }());

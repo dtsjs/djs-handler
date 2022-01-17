@@ -1,7 +1,7 @@
-import { CommandInteraction } from 'discord.js';
+import { ClientEvents, CommandInteraction } from 'discord.js';
 import client from './Client';
 
-interface Run {
+export interface Run {
     (client: client, interaction: CommandInteraction): void
 }
 
@@ -38,6 +38,10 @@ export interface HandlerOptions {
      */
     commandFolder: string;
     /**
+     * The folder path to the events
+     */
+    eventFolder: string;
+    /**
      * Whether to register the commands
      * @type boolean
      * @default false
@@ -56,4 +60,20 @@ export interface HandlerOptions {
      * @example ['123456789012345678']
      */
     guilds?: string[];
+}
+
+export interface EventRun {
+    (client: client, ...args: any[]): void
+}
+
+export interface Event {
+    /**
+     * The name of the event
+     * @type string
+     * @example 'messageCreate'
+     * @required
+     * @keyof ClientEvents
+     */
+    name: keyof ClientEvents;
+    run: EventRun;
 }

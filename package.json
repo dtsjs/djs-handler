@@ -6,7 +6,8 @@
   "typings": "src/",
   "scripts": {
     "test": "echo \"No test specified\"",
-    "build": "npx tsc"
+    "build": "npx tsc",
+    "docs": "npx typedoc src/index.ts --excludePrivate"
   },
   "author": "Tirupatibalaji-Dev",
   "license": "ISC",

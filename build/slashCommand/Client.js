@@ -22,6 +22,7 @@ var client = /** @class */ (function (_super) {
         var _this = _super.call(this, options) || this;
         _this.slashCommands = new discord_js_1.Collection();
         _this.allCommands = new discord_js_1.Collection();
+        _this.events = new discord_js_1.Collection();
         return _this;
     }
     return client;

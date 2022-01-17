@@ -1,5 +1,18 @@
 "use strict";
+// import { ClientEvents } from 'discord.js';
+// import { Handler } from './slashCommand/commandCreator';
+// import { Command, Event, HandlerOptions, EventRun } from './slashCommand/handler.interfaces';
+// export { Handler, Command, Event, HandlerOptions, ClientEvents, EventRun };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Handler = void 0;
-var commandCreator_1 = require("./slashCommand/commandCreator");
-Object.defineProperty(exports, "Handler", { enumerable: true, get: function () { return commandCreator_1.Handler; } });
+__exportStar(require("./slashCommand/commandCreator"), exports);
+__exportStar(require("./slashCommand/handler.interfaces"), exports);

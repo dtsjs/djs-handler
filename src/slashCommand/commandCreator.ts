@@ -1,6 +1,6 @@
-import { Command, HandlerOptions } from './handler.interfaces';
+import { Command, HandlerOptions, Event } from './handler.interfaces';
 import { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types';
-import { readdirSync } from 'fs';
+import { read, readdirSync } from 'fs';
 import { Collection } from 'discord.js';
 import client from './Client';
 import Utils from './utils';
@@ -19,13 +19,17 @@ export class Handler {
     constructor(client: client, options: HandlerOptions) {
         this.client = client;
 
-        const { commandFolder, registerCommands, deferReply, guilds } = options;
+        const { commandFolder, eventFolder, registerCommands, deferReply, guilds } = options;
 
         this.client.slashCommands = new Collection();
         this.client.allCommands = new Collection();
+        this.client.events = new Collection();
+
+        const main = require.main;
 
         this.options = {
-            commandFolder,
+            commandFolder: commandFolder || `${main?.path}/commands`,
+            eventFolder: eventFolder || `${main?.path}/events`,
             registerCommands: registerCommands || false,
             deferReply: deferReply || false,
             guilds: guilds || []
@@ -36,6 +40,8 @@ export class Handler {
             if (options.registerCommands) this.registerSlashCommands();
             this.handleSlashCommands();
         })
+
+        this.loadEvents();
     }
 
     /**
@@ -47,12 +53,11 @@ export class Handler {
         return new Promise(async (resolve, reject) => {
             try {
                 const main = require.main;
-
-                const commandFolderPath = `${main?.path}/${this.options.commandFolder}`;
-                readdirSync(commandFolderPath).forEach((dir) => {
-                    const commands = readdirSync(`${commandFolderPath}/${dir}`).filter(file => file.endsWith(".js") || file.endsWith(".ts"));
+                const commandsDir = `${main?.path}/${this.options.commandFolder}`;
+                readdirSync(commandsDir).forEach((dir) => {
+                    const commands = readdirSync(`${commandsDir}/${dir}`).filter(file => file.endsWith(".js") || file.endsWith(".ts"));
                     for (const file of commands) {
-                        const command = require(`${commandFolderPath}/${dir}/${file}`);
+                        const command = require(`${commandsDir}/${dir}/${file}`);
 
                         const cmd = Utils.fixCommand(command);
 
@@ -105,15 +110,27 @@ export class Handler {
         })
     }
 
+    private loadEvents() {
+        const main = require.main;
+        const eventsDir = `${main?.path}/${this.options.eventFolder}`;
+        
+        readdirSync(eventsDir).forEach(async (dir) => {
+            const event: Event = require(`${eventsDir}/${dir}`);
+            this.client.events.set(event.name, event);
+            this.client.on(event.name, (...args) => event.run(this.client, ...args));
+    })
+}
+
     /**
-     * reloadCommands
+     * reloadHandler
      * @description Reloads all commands
      * @memberof Handler
-     * @example Handler.reloadCommands()
+     * @example Handler.reloadHandler()
      */
-    public reloadCommands() {
+    public reloadHandler() {
         this.loadCommands().then(() => {
             this.registerSlashCommands();
         })
+        this.loadEvents();
     }
 }
