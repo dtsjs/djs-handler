@@ -26,11 +26,15 @@ npm i @dtsjs/djs-handler
 
 # Example Usage
 
-### Worktree
+### Directory tree
+
 ```bash
-.
+discord-bot/
 ├── ...
 ├── index.js
+├── events
+│   ├── ...
+│   └── ready.js
 ├── commands
 │   ├── ...
 │   └── info
@@ -38,6 +42,7 @@ npm i @dtsjs/djs-handler
 │       └── ping.js
 └── ...
 ```
+
 ### Main File
 
 ```js
@@ -67,18 +72,28 @@ module.exports = {
     name: 'ping',
     description: 'Ping!',
 
-    //options
+    //optional - this is example of command options
     options: {
         string: [
-            { name: 'string_choices_name', description: 'option string with choices', required: false, choices: [{ name: 'choice 1', value: 'ch1' }, { name: 'choice 2', value: 'c2' }] },
+            {
+                name: 'string_choices_name', description: 'option string with choices', 
+                required: false,
+                choices: [
+                        { name: 'choice 1', value: 'ch1' },
+                        { name: 'choice 2', value: 'c2' }
+                    ]
+                },
             { name: 'string_name', description: 'option string', required: false }
         ],
+
         user: [
             { name: 'user_name', description: 'user input', required: false }
         ],
+
         channel: [
             { name: 'channel_name', description: 'channel input', required: false }
         ],
+
         role: [
             { name: 'role_name', description: ' role input', required: false }
         ]
@@ -93,8 +108,20 @@ module.exports = {
 }
 ```
 
+## Event File
+
+```js
+module.exports = {
+    name: 'ready',
+
+    run async (client) {
+        console.log(`Bot is ready!`);
+    }
+}
+```
+
 <br>
 
 # Help
 
-If you don't unserstand how to use this module, please check out the [documentation](https://dtsjs.github.io/djs-handler/) or join the [discord server](https://discord.gg/dtsjs)
+If you don't understand how to use this module, please check out the [documentation](https://dtsjs.github.io/djs-handler/) or join the [discord server](https://discord.gg/dtsjs)
